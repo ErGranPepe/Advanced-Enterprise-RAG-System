@@ -1,0 +1,84 @@
+{
+  "dataset": "scifact",
+  "docs": 5183,
+  "queries": 300,
+  "methods": {
+    "BM25": {
+      "nDCG@10": 0.6602,
+      "Recall@10": 0.7843,
+      "MRR@10": 0.6258,
+      "Hit@10": 0.8033
+    },
+    "TF-IDF palabras": {
+      "nDCG@10": 0.6209,
+      "Recall@10": 0.763,
+      "MRR@10": 0.5843,
+      "Hit@10": 0.78
+    },
+    "TF-IDF caracteres": {
+      "nDCG@10": 0.6639,
+      "Recall@10": 0.8428,
+      "MRR@10": 0.6139,
+      "Hit@10": 0.8567
+    },
+    "MiniLM": {
+      "nDCG@10": 0.6451,
+      "Recall@10": 0.7833,
+      "MRR@10": 0.6047,
+      "Hit@10": 0.7933
+    },
+    "BM25 + MiniLM (RRF)": {
+      "nDCG@10": 0.6841,
+      "Recall@10": 0.8089,
+      "MRR@10": 0.6492,
+      "Hit@10": 0.8267
+    }
+  },
+  "compared_to_BM25": [
+    {
+      "method": "TF-IDF palabras",
+      "delta": -0.0393,
+      "CI95": [
+        -0.0651,
+        -0.0147
+      ],
+      "wins": 36,
+      "losses": 79,
+      "ties": 185
+    },
+    {
+      "method": "TF-IDF caracteres",
+      "delta": 0.0037,
+      "CI95": [
+        -0.0224,
+        0.0316
+      ],
+      "wins": 63,
+      "losses": 62,
+      "ties": 175
+    },
+    {
+      "method": "MiniLM",
+      "delta": -0.0151,
+      "CI95": [
+        -0.0547,
+        0.0235
+      ],
+      "wins": 69,
+      "losses": 74,
+      "ties": 157
+    },
+    {
+      "method": "BM25 + MiniLM (RRF)",
+      "delta": 0.0239,
+      "CI95": [
+        0.001,
+        0.0457
+      ],
+      "wins": 63,
+      "losses": 32,
+      "ties": 205
+    }
+  ],
+  "elapsed_s": 376.2
+}
