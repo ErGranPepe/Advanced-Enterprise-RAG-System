@@ -37,3 +37,17 @@ Antes de desplegar un buscador híbrido:
 El script `auditar_consultas.py` permite examinar las regresiones a partir del CSV generado por `benchmark.py`.
 
 **Evidencia:** BEIR SciFact qrels/test.tsv, ejecución original del benchmark sobre 300 consultas SciFact, reproducción de esta consulta con ambos recuperadores, 13 octubre 2026.
+
+## Por qué RRF produjo exactamente ese cambio
+
+Los **siete documentos** situados antes que el documento relevante en el ranking híbrido aparecían dentro del top 100 de **ambos** recuperadores. En cambio, el relevante solo aparecía en el top 100 de BM25.
+
+El **primer documento del híbrido** (`5402581`, sin etiqueta de relevancia para q660) estaba en el puesto **12** de BM25 y **20** de MiniLM. RRF con `k=60` suma:
+
+`RRF(5402581) = 1/(60+12) + 1/(60+20) = 0.026389`
+
+El documento etiquetado como relevante (`1215116`) estaba **primero** en BM25, pero **fuera del top 100** de MiniLM, por lo que solo obtiene:
+
+`RRF(1215116) = 1/(60+1) = 0.016393`
+
+**Resultado:** un documento en los puestos 12 y 20 de dos rankings supera al puesto 1 de uno solo. No es un fallo de implementación: es el comportamiento de esta configuración de fusión de rankings. Se debe valorar con las etiquetas de relevancia y el contexto de uso.
