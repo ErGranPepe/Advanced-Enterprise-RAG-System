@@ -58,3 +58,17 @@ Diferencia híbrido − BM25 (nDCG@10): SciFact +0.0239, IC bootstrap pareado 95
 Ejemplos de retrocesos: consulta SciFact `660` (“Ivermectin is used to treat onchocerciasis.”): BM25 nDCG@10 1.0, híbrido 0.3155; NFCorpus `PLAIN-1320` (“Harvard Physicians’ Study II”): BM25 0.45, híbrido 0.0. Que la media suba no justifica reemplazar el buscador sin revisar regresiones.
 
 Los resultados se generaron en un runner aislado, no contra datos internos de ninguna empresa. `results/*/summary.json` contiene métricas y estadísticas pareadas; `results/*/audit_samples.json` incluye casos con identificación de consulta y documentos. El programa genera además `per_query.csv` al reproducirse, **no está versionado aquí**. No hay benchmark de coste de GPU, producción ni inferencia de LLM generativo.
+
+
+## Hallazgo específico y herramienta para auditar regresiones
+
+El caso **SciFact #660** está explicado en [results/scifact/CASE_660.md](results/scifact/CASE_660.md): BM25 recupera el documento etiquetado relevante en posición **1**; MiniLM no lo incluye en su top **100** y la fusión RRF lo desplaza a la posición **8**. El informe separa hechos observados de posibles explicaciones.
+
+Para inspeccionar **qué consultas empeoran** después de ejecutar el benchmark:
+
+```bash
+python auditar_consultas.py resultados/scifact/per_query.csv --top 15 --threshold 0.1 --out regresiones_scifact.json
+python auditar_consultas.py resultados/nfcorpus/per_query.csv --top 15 --threshold 0.1 --out regresiones_nfcorpus.json
+```
+
+El script únicamente necesita Python estándar. Está probado con datos de control; la auditoría usa pares de resultados de la **misma consulta**. No sustituye la revisión manual de casos prioritarios.
