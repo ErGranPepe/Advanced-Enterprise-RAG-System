@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sentence_transformers import SentenceTransformer
 
-BASE=Path("/vercel")
+BASE=Path(__file__).resolve().parent
 TOP=100
 TOKEN=re.compile(r"\w+",re.UNICODE)
 def tokenize(t):return [w for w in TOKEN.findall(t.lower()) if len(w)>1]
